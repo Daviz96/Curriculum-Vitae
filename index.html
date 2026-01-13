@@ -581,11 +581,11 @@
             "Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z RODO (UE 2016/679).",
         },
       };
-
+      let currentLang = "it";
       function setLanguage(lang) {
 
         document.documentElement.lang = lang;
-        let currentLang = lang;
+        currentLang = lang;
         document.getElementById("profile-title").innerText =
           data[lang].titles.profile;
         document.getElementById("links-title").innerText =
