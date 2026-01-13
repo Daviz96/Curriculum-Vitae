@@ -581,125 +581,193 @@
             "Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z RODO (UE 2016/679).",
         },
       };
-      let currentLang = "it";
-      function setLanguage(lang) {
+      /* =========================================================
+   GLOBAL STATE
+   ========================================================= */
 
-        document.documentElement.lang = lang;
-        currentLang = lang;
-        document.getElementById("profile-title").innerText =
-          data[lang].titles.profile;
-        document.getElementById("links-title").innerText =
-          data[lang].titles.links;
-        document.getElementById("personal-title").innerText =
-          data[lang].titles.personal;
-        document.getElementById("education-title").innerText =
-          data[lang].titles.education;
-        document.getElementById("courses-title").innerText =
-          data[lang].titles.courses;
-        document.getElementById("projects-title").innerText =
-          data[lang].titles.projects;
-        document.getElementById("skills-title").innerText =
-          data[lang].titles.skills;
-        document.getElementById("languages-title").innerText =
-          data[lang].titles.languages;
-        document.getElementById("experience-title").innerText =
-          data[lang].titles.experience;
+/**
+ * Keeps track of the currently selected language.
+ * Default language is Italian.
+ */
+let currentLang = "it";
 
-        document.getElementById("profile-text").innerText = data[lang].profile;
 
-        const p = data[lang].personal;
+/* =========================================================
+   LANGUAGE HANDLING
+   ========================================================= */
 
-        document.getElementById("personal-info").innerHTML = `
-            <li>📍 ${p.location}</li>
-            <li>✉️ ${p.email}</li>
-            <li>📞 ${p.phone.join("<br>")}</li>
-            <li>🚗 ${p.driving}</li>
-        `;
+/**
+ * Updates the CV content based on the selected language.
+ * Also updates the global state used by other features
+ * (e.g. PDF download on mobile).
+ */
+function setLanguage(lang) {
+  // Update global language state
+  currentLang = lang;
 
-        document.getElementById("links").innerHTML = data[lang].links
-          .map((l) => `<li>${l}</li>`)
-          .join("");
-        document.getElementById("education").innerHTML = data[lang].education
-          .map((i) => `<li>${i}</li>`)
-          .join("");
-        document.getElementById("courses").innerHTML = data[lang].courses
-          .map(
-            (c) => `
-      <li>
-        <b>${c.title}</b>
-        <ul>
-          ${c.details.map((d) => `<li>${d}</li>`).join("")}
-        </ul>
-        <a href="${c.certificate}" target="_blank" class="no-print">
-          📄 ${c.link}
-        </a>
-      </li>
-    `
-          )
-          .join("");
-        document.getElementById("projects").innerHTML = data[lang].projects
-          .map(
-            (p) => `
-      <li>
-        <b>${p.name}</b><br>
-        ${p.description}<br>
-        <i>Tech stack:</i> ${p.tech}<br>
-        <a href="${p.github}" target="_blank" class="no-print">
-          🔗 ${p.link}
-        </a>
-        <span class="print-only">Repository disponibile su GitHub</span>
-      </li>
-    `
-          )
-          .join("");
-        document.getElementById("skills").innerHTML = data[lang].skills
-          .map((i) => `<li>${i}</li>`)
-          .join("");
-        document.getElementById("languages").innerHTML = data[lang].languages
-          .map((l) => `<li>${l}</li>`)
-          .join("");
-        document.getElementById("experience").innerHTML = data[lang].experience
-          .map(
-            (exp) => `
-    <li>
-      <b>${exp.title}</b>
-      <ul>
-        ${exp.details.map((d) => `<li>${d}</li>`).join("")}
-      </ul>
-    </li>
-  `
-          )
-          .join("");
+  // Update HTML lang attribute (accessibility + SEO)
+  document.documentElement.lang = lang;
 
-        document.getElementById("privacy").innerText = data[lang].privacy;
-      }
+  // ---- TITLES ----
+  document.getElementById("profile-title").innerText =
+    data[lang].titles.profile;
+  document.getElementById("links-title").innerText =
+    data[lang].titles.links;
+  document.getElementById("personal-title").innerText =
+    data[lang].titles.personal;
+  document.getElementById("education-title").innerText =
+    data[lang].titles.education;
+  document.getElementById("courses-title").innerText =
+    data[lang].titles.courses;
+  document.getElementById("projects-title").innerText =
+    data[lang].titles.projects;
+  document.getElementById("skills-title").innerText =
+    data[lang].titles.skills;
+  document.getElementById("languages-title").innerText =
+    data[lang].titles.languages;
+  document.getElementById("experience-title").innerText =
+    data[lang].titles.experience;
 
-        // Download PDF Button
-        function isMobileDevice() {
-            return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        }
+  // ---- PROFILE ----
+  document.getElementById("profile-text").innerText =
+    data[lang].profile;
 
-        const pdfLinks = {
-          it: "assets/pdf/cv_ita.pdf",
-          en: "assets/pdf/cv_eng.pdf",
-          pl: "assets/pdf/cv_pl.pdf"
-        };
+  // ---- PERSONAL INFO ----
+  const p = data[lang].personal;
+  document.getElementById("personal-info").innerHTML = `
+    <li>📍 ${p.location}</li>
+    <li>✉️ ${p.email}</li>
+    <li>📞 ${p.phone.join("<br>")}</li>
+    <li>🚗 ${p.driving}</li>
+  `;
 
-        document.getElementById("pdf-btn").addEventListener("click", () => {
-          if (isMobileDevice()) {
-          // MOBILE → download PDF statico
-          window.open(pdfLinks[currentLang], "_blank");
-          } else {
-          // DESKTOP → stampa / genera PDF
-          window.print();
-          }
-        });
+  // ---- LINKS ----
+  document.getElementById("links").innerHTML = data[lang].links
+    .map((l) => `<li>${l}</li>`)
+    .join("");
 
-      function toggleDarkMode() {
-        document.body.classList.toggle("dark");
-      }
+  // ---- EDUCATION ----
+  document.getElementById("education").innerHTML = data[lang].education
+    .map((i) => `<li>${i}</li>`)
+    .join("");
 
-      setLanguage("it");
+  // ---- COURSES ----
+  document.getElementById("courses").innerHTML = data[lang].courses
+    .map(
+      (c) => `
+        <li>
+          <b>${c.title}</b>
+          <ul>
+            ${c.details.map((d) => `<li>${d}</li>`).join("")}
+          </ul>
+          <a href="${c.certificate}" target="_blank" class="no-print">
+            📄 ${c.link}
+          </a>
+        </li>
+      `
+    )
+    .join("");
+
+  // ---- PROJECTS ----
+  document.getElementById("projects").innerHTML = data[lang].projects
+    .map(
+      (p) => `
+        <li>
+          <b>${p.name}</b><br>
+          ${p.description}<br>
+          <i>Tech stack:</i> ${p.tech}<br>
+          <a href="${p.github}" target="_blank" class="no-print">
+            🔗 ${p.link}
+          </a>
+          <span class="print-only">Repository disponibile su GitHub</span>
+        </li>
+      `
+    )
+    .join("");
+
+  // ---- SKILLS ----
+  document.getElementById("skills").innerHTML = data[lang].skills
+    .map((i) => `<li>${i}</li>`)
+    .join("");
+
+  // ---- LANGUAGES ----
+  document.getElementById("languages").innerHTML = data[lang].languages
+    .map((l) => `<li>${l}</li>`)
+    .join("");
+
+  // ---- EXPERIENCE ----
+  document.getElementById("experience").innerHTML = data[lang].experience
+    .map(
+      (exp) => `
+        <li>
+          <b>${exp.title}</b>
+          <ul>
+            ${exp.details.map((d) => `<li>${d}</li>`).join("")}
+          </ul>
+        </li>
+      `
+    )
+    .join("");
+
+  // ---- PRIVACY ----
+  document.getElementById("privacy").innerText =
+    data[lang].privacy;
+}
+
+
+/* =========================================================
+   PDF DOWNLOAD (DESKTOP / MOBILE)
+   ========================================================= */
+
+/**
+ * Detects if the user is on a mobile device.
+ */
+function isMobileDevice() {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+/**
+ * Static PDF links used on mobile devices.
+ */
+const pdfLinks = {
+  it: "assets/pdf/cv_ita.pdf",
+  en: "assets/pdf/cv_eng.pdf",
+  pl: "assets/pdf/cv_pl.pdf"
+};
+
+/**
+ * Handles PDF export:
+ * - Desktop: browser print (always up-to-date)
+ * - Mobile: download static PDF
+ */
+document.getElementById("pdf-btn").addEventListener("click", () => {
+  if (isMobileDevice()) {
+    window.open(pdfLinks[currentLang], "_blank");
+  } else {
+    window.print();
+  }
+});
+
+
+/* =========================================================
+   UI UTILITIES
+   ========================================================= */
+
+/**
+ * Toggles dark mode on/off.
+ */
+function toggleDarkMode() {
+  document.body.classList.toggle("dark");
+}
+
+
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
+
+// Default language on page load
+setLanguage("it");
+
     </script>
   </body>
 </html>
