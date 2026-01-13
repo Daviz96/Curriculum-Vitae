@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dawid Sebastian Wrzesiński - CV</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --text: #000000;
+        --card: #f5f5f5;
+        --accent: #0066cc;
+      }
+
+      body.dark {
+        --bg: #121212;
+        --text: #eaeaea;
+        --card: #1e1e1e;
+        --accent: #4da3ff;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+        line-height: 1.6;
+        transition: background 0.3s, color 0.3s;
+      }
+
+      header {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+
+      img {
+        border-radius: 8px;
+      }
+
+      h1,
+      h3 {
+        margin-bottom: 5px;
+      }
+
+      hr {
+        margin: 25px 0;
+        border: none;
+        border-top: 1px solid var(--card);
+      }
+
+      ul {
+        padding-left: 20px;
+      }
+
+      .controls button {
+        margin: 5px 5px 5px 0;
+        padding: 6px 12px;
+        cursor: pointer;
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 4px;
+      }
+
+      .section {
+        margin-bottom: 25px;
+        background: var(--card);
+        padding: 15px;
+        border-radius: 6px;
+      }
+
+      /* STAMPA PDF */
+      @media print {
+        .controls {
+          display: none;
+        }
+        .no-print {
+          display: none;
+        }
+        body {
+          background: #fff;
+          color: #000;
+        }
+        .section {
+          background: none;
+          padding: 0;
+        }
+      }
+
+      .print-only {
+        display: none;
+      }
+
+      @media print {
+        .print-only {
+          display: inline;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <img
+        src="assets/images/foto-profilo-CV.png"
+        alt="Foto profilo"
+        height="180"
+      />
+      <div>
+        <h1>Dawid Sebastian Wrzesiński</h1>
+        <p id="job-title">Junior Python Developer / IT Support</p>
+
+        <div class="controls">
+          <button onclick="setLanguage('it')">IT</button>
+          <button onclick="setLanguage('pl')">PL</button>
+          <button onclick="setLanguage('en')">EN</button>
+          <button onclick="toggleDarkMode()">🌙 Dark</button>
+          <button onclick="exportPDF()">📄 Export PDF</button>
+        </div>
+      </div>
+    </header>
+
+    <hr />
+
+    <div class="section">
+      <h3 id="profile-title"></h3>
+      <p id="profile-text"></p>
+    </div>
+
+    <div class="section">
+      <h3 id="skills-title"></h3>
+      <ul id="skills"></ul>
+    </div>
+
+    <div class="section">
+      <h3 id="education-title"></h3>
+      <ul id="education"></ul>
+    </div>
+
+    <div class="section">
+      <h3 id="courses-title"></h3>
+      <ul id="courses"></ul>
+    </div>
+
+    <div class="section">
+      <h3 id="projects-title"></h3>
+      <ul id="projects"></ul>
+    </div>
+
+    <div class="section">
+      <h3 id="languages-title"></h3>
+      <ul id="languages"></ul>
+    </div>
+
+    <div class="section">
+      <h3 id="experience-title"></h3>
+      <ul id="experience"></ul>
+    </div>
+
+    <div class="section">
+      <h3 id="personal-title"></h3>
+      <ul id="personal-info"></ul>
+    </div>
+
+    <div class="section">
+      <h3 id="links-title"></h3>
+      <ul id="links"></ul>
+    </div>
+
+    <hr />
+
+    <p id="privacy" style="font-size: 0.9em"></p>
+
+    <script>
+      const data = {
+        it: {
+          titles: {
+            profile: "Profilo professionale",
+            personal: "Informazioni personali",
+            education: "Formazione",
+            skills: "Competenze tecniche",
+            languages: "Lingue",
+            experience: "Esperienze lavorative",
+            links: "Link professionali",
+            courses: "Corsi e certificazioni",
+            projects: "Progetti personali",
+          },
+          profile: `
+                Junior IT / Python Developer con formazione informatica e esperienza pratica in ambito IT.
+                Competenze di base su sistemi Windows e Linux, database SQL e sviluppo di applicazioni web con Django.
+                Abituato al problem solving, al lavoro di squadra e all’apprendimento continuo di nuove tecnologie.
+                Fortemente motivato alla crescita professionale e allo sviluppo di competenze in ambito IT.
+            `,
+          links: [
+            "<b>GitHub:</b> <a href='https://github.com/Daviz96' target='_blank'>github.com/Daviz96</a>",
+            "<b>LinkedIn:</b> <a href='https://www.linkedin.com/in/dawid-sebastian-wrzesinski/' target='_blank'>https://www.linkedin.com/in/dawid-sebastian-wrzesinski/</a>",
+          ],
+          personal: {
+            location: "Roma, Italia",
+            email: "dawidwrzesinski96@gmail.com",
+            phone: ["+39 366 702 8485"],
+            driving: "Patente di guida: B",
+          },
+
+          education: [
+            "Laurea in Ingegneria Informatica – Università degli Studi Roma Tre (in corso)",
+            "Diploma di Perito Industriale in Elettronica ed Elettrotecnica – ITIS C. Rosatelli, Rieti (2015)",
+          ],
+          courses: [
+            {
+              title: "Corso Python Developer – Django (180 ore)",
+              details: [
+                "Python e programmazione orientata agli oggetti (OOP)",
+                "Sviluppo backend con Django",
+                "Database relazionali: SQL, PostgreSQL",
+                "HTML, CSS, JavaScript",
+                "Progetto finale con applicazione web funzionante",
+              ],
+              certificate:
+                "assets/certificates/Diploma_ONL_PYT_W_20_Dawid_Wrzesiński.pdf",
+              link: "Visualizza certificato",
+            },
+          ],
+          projects: [
+            {
+              name: "Vehicle Management System",
+              description:
+                "Applicazione web backend sviluppata con Django per la gestione di veicoli, utenti e dati persistenti.",
+              tech: "Python, Django, PostgreSQL, HTML, CSS",
+              github: "https://github.com/Daviz96/Veichle-Management-System",
+              link: "Repository GitHub",
+            },
+            {
+              name: "ScrumLab – Jedzonko",
+              description:
+                "Applicazione web Django sviluppata in un progetto di gruppo con metodologia Agile (Scrum), per gestire pasti e pianificazione alimentare.",
+              tech: "Python, Django, HTML, CSS, Git, Agile (Scrum)",
+              github: "https://github.com/Daviz96/ScrumLab-Jedzonko",
+              link: "Repository GitHub",
+            },
+            {
+              name: "Conference Room Reservation App",
+              description:
+                "Applicazione web Django per la gestione di prenotazioni di sale conferenze, con logica backend, routing e integrazione database.",
+              tech: "Python, Django, HTML, CSS, Database PostgreSQL",
+              github:
+                "https://github.com/Daviz96/Conference-Room-Reservation-App",
+              link: "Repository GitHub",
+            },
+          ],
+
+          skills: [
+            "<b>Linguaggi:</b> Python, SQL, JavaScript",
+            "<b>Framework:</b> Django",
+            "<b>Web:</b> HTML5, CSS3",
+            "<b>Database:</b> PostgreSQL",
+            "<b>Strumenti:</b> Git, GitHub, Docker",
+            "<b>Produttività:</b> Microsoft Office (Word, Excel, PowerPoint)",
+          ],
+          languages: [
+            "Italiano: Madrelingua",
+            "Polacco: Fluente (C1)",
+            "Inglese: Buono (B2)",
+          ],
+          experience: [
+            {
+              title:
+                "Tecnico manutentore – Hotel 4★, Cortina d'Ampezzo, Hotel Mirage (06/2023 – 10/2024)",
+              details: [
+                "Diagnosi e risoluzione di problemi tecnici su impianti e sistemi",
+                "Attività di troubleshooting e interventi correttivi",
+                "Supporto tecnico ai reparti interni e gestione delle segnalazioni",
+                "Gestione delle priorità e lavoro sotto pressione",
+              ],
+            },
+            {
+              title:
+                "Chef de Rang – Hotel 4★, Cortina d'Ampezzo, Hotel Cortina (05/2025 – 10/2025)",
+              details: [
+                "Gestione operativa del servizio e coordinamento con il team",
+                "Comunicazione efficace con clienti e colleghi",
+                "Problem solving in ambienti dinamici e ad alta pressione",
+                "Organizzazione delle attività e rispetto delle procedure",
+              ],
+            },
+            {
+              title:
+                "Operatore macchina bordatrice – Calitan Furniture Factory z.o.o., Polonia (02/2022 – 05/2023)",
+              details: [
+                "Utilizzo di macchinari industriali seguendo procedure strutturate",
+                "Monitoraggio dei processi e controllo qualità",
+                "Risoluzione di anomalie operative",
+                "Lavoro in contesti produttivi organizzati",
+              ],
+            },
+            {
+              title: "Allestitore eventi – varie aziende (2015 – in corso)",
+              details: [
+                "Lavoro in team per l’allestimento tecnico di eventi",
+                "Gestione di tempistiche, logistica e requisiti tecnici",
+                "Adattamento rapido a contesti e richieste diverse",
+                "Collaborazione con figure tecniche e operative",
+              ],
+            },
+          ],
+          privacy:
+            "Autorizzo il trattamento dei dati personali ai sensi del GDPR (Regolamento UE 2016/679).",
+        },
+
+        en: {
+          titles: {
+            profile: "Professional Profile",
+            personal: "Personal Information",
+            education: "Education",
+            skills: "Technical Skills",
+            languages: "Languages",
+            experience: "Work Experience",
+            links: "Professional Links",
+            courses: "Courses & Certifications",
+            projects: "Personal Projects",
+          },
+          profile: `
+                Junior IT / Python Developer with an educational background in computer science and practical experience in IT environments.
+                Basic knowledge of Windows and Linux systems, SQL databases, and web application development using Django.
+                Experienced in problem solving, teamwork, and continuous learning of new technologies.
+                Highly motivated to grow professionally and develop new skills within an IT department.
+            `,
+          links: [
+            "<b>GitHub:</b> <a href='https://github.com/Daviz96' target='_blank'>github.com/Daviz96</a>",
+            "<b>LinkedIn:</b> <a href='https://www.linkedin.com/in/dawid-sebastian-wrzesinski/' target='_blank'>https://www.linkedin.com/in/dawid-sebastian-wrzesinski/</a>",
+          ],
+          personal: {
+            location: "Rome, Italy",
+            email: "dawidwrzesinski96@gmail.com",
+            phone: ["+39 366 702 8485", "+48 730 109 411"],
+            driving: "Driving licence: Category B",
+          },
+
+          education: [
+            "Bachelor's Degree in Computer Engineering – Roma Tre University (ongoing)",
+            "Technical Diploma in Electronics and Electrical Engineering – ITIS C. Rosatelli (2015)",
+          ],
+          courses: [
+            {
+              title: "Python Developer Course – Django (180 hours)",
+              details: [
+                "Python and Object-Oriented Programming (OOP)",
+                "Backend development with Django",
+                "Relational databases: SQL, PostgreSQL",
+                "HTML, CSS, JavaScript",
+                "Final project: fully functional web application",
+              ],
+              certificate:
+                "assets/certificates/Diploma_ONL_PYT_W_20_Dawid_Wrzesiński.pdf",
+              link: "View certificate",
+            },
+          ],
+          projects: [
+            {
+              name: "Vehicle Management System",
+              description:
+                "Backend web application developed with Django for managing vehicles, users and persistent data.",
+              tech: "Python, Django, PostgreSQL, HTML, CSS",
+              github: "https://github.com/Daviz96/Veichle-Management-System",
+              link: "GitHub Repository",
+            },
+            {
+              name: "ScrumLab – Jedzonko",
+              description:
+                "Web application built with Django as part of a team project using Agile (Scrum), focusing on meal planning and healthy eating management.",
+              tech: "Python, Django, HTML, CSS, Git, Agile (Scrum)",
+              github: "https://github.com/Daviz96/ScrumLab-Jedzonko",
+              link: "GitHub Repository",
+            },
+            {
+              name: "Conference Room Reservation App",
+              description:
+                "Django web application for managing conference room reservations, including backend logic, routing and database integration.",
+              tech: "Python, Django, HTML, CSS, Database PostgreSQL",
+              github:
+                "https://github.com/Daviz96/Conference-Room-Reservation-App",
+              link: "GitHub Repository",
+            },
+          ],
+
+          skills: [
+            "<b>Programming Languages: Python, SQL, JavaScript:</b> Python, SQL, JavaScript",
+            "<b>Frameworks:</b> Django",
+            "<b>Web:</b> HTML5, CSS3",
+            "<b>Databases:</b> PostgreSQL",
+            "<b>Tools:</b> Git, GitHub, Docker",
+            "<b>Productivity:</b> Microsoft Office (Word, Excel, PowerPoint)",
+          ],
+          languages: [
+            "Italian: Native",
+            "Polish: Fluent (C1)",
+            "English: Upper-Intermediate (B2)",
+          ],
+          experience: [
+            {
+              title:
+                "Maintenance Technician – 4★ Hotel, Cortina d'Ampezzo, Hotel Mirage (06/2023 – 10/2024)",
+              details: [
+                "Diagnosed and resolved technical issues on systems and equipment",
+                "Performed troubleshooting and corrective interventions",
+                "Provided technical support to internal users",
+                "Managed priorities and worked effectively under pressure",
+              ],
+            },
+            {
+              title:
+                "Chef de Rang – 4★ Hotel, Cortina d'Ampezzo, Hotel Cortina (05/2025 – 10/2025)",
+              details: [
+                "Operational service management and team coordination",
+                "Effective communication with customers and colleagues",
+                "Problem solving in fast-paced environments",
+                "Task organization and compliance with procedures",
+              ],
+            },
+            {
+              title:
+                "Edge Banding Machine Operator – Calitan Furniture Factory z.o.o., Poland (02/2022 – 05/2023)",
+              details: [
+                "Operated industrial machinery following structured processes",
+                "Monitored production workflows and quality standards",
+                "Resolved operational anomalies",
+                "Worked in structured production environments",
+              ],
+            },
+            {
+              title:
+                "Event Setup Technician – Various Companies (2015 – Present)",
+              details: [
+                "Team-based technical setup for events",
+                "Management of timelines, logistics, and technical requirements",
+                "Rapid adaptation to different operational contexts",
+                "Collaboration with technical and operational staff",
+              ],
+            },
+          ],
+          privacy:
+            "I authorize the processing of my personal data in accordance with GDPR (EU Regulation 2016/679).",
+        },
+
+        pl: {
+          titles: {
+            profile: "Profil zawodowy",
+            personal: "Informacje osobiste",
+            education: "Wykształcenie",
+            skills: "Umiejętności techniczne",
+            languages: "Języki",
+            experience: "Doświadczenie zawodowe",
+            links: "Linki zawodowe",
+            courses: "Kursy i certyfikaty",
+            projects: "Projekty osobiste",
+          },
+          profile: `
+            Junior IT / Python Developer z wykształceniem informatycznym i praktycznym doświadczeniem w pracy z systemami IT.
+            Posiadam podstawową znajomość systemów Windows i Linux, baz danych SQL oraz aplikacji webowych opartych o Django.
+            Doświadczenie w rozwiązywaniu problemów technicznych, pracy zespołowej oraz samodzielnej nauce nowych technologii.
+            Zmotywowany do dalszego rozwoju zawodowego i zdobywania nowych kompetencji w dziale IT.
+            `,
+
+          links: [
+            "<b>GitHub:</b> <a href='https://github.com/Daviz96' target='_blank'>github.com/Daviz96</a>",
+            "<b>LinkedIn:</b> <a href='https://www.linkedin.com/in/dawid-sebastian-wrzesinski/' target='_blank'>https://www.linkedin.com/in/dawid-sebastian-wrzesinski/</a>",
+          ],
+          personal: {
+            location: "Wieruszów",
+            email: "dawidwrzesinski96@gmail.com",
+            phone: ["+48 730 109 411"],
+            driving: "Prawo jazdy: kat. B",
+          },
+
+          education: [
+            "Inżynieria Informatyczna – Uniwersytet Roma Tre (w trakcie)",
+            "Dyplom technika elektronika i elektrotechnika – ITIS C. Rosatelli (2015)",
+          ],
+          courses: [
+            {
+              title: "Kurs Python Developer – Django (180 godzin)",
+              details: [
+                "Python i programowanie obiektowe (OOP)",
+                "Backend w frameworku Django",
+                "Relacyjne bazy danych: SQL, PostgreSQL",
+                "HTML, CSS, JavaScript",
+                "Projekt końcowy: działająca aplikacja webowa",
+              ],
+              certificate:
+                "assets/certificates/Diploma_ONL_PYT_W_20_Dawid_Wrzesiński.pdf",
+              link: "Zobacz certyfikat",
+            },
+          ],
+          projects: [
+            {
+              name: "Vehicle Management System",
+              description:
+                "Backendowa aplikacja webowa w Django do zarządzania pojazdami, użytkownikami i danymi.",
+              tech: "Python, Django, PostgreSQL, HTML, CSS",
+              github: "https://github.com/Daviz96/Veichle-Management-System",
+              link: "Repozytorium GitHub",
+            },
+            {
+              name: "ScrumLab – Jedzonko",
+              description:
+                "Aplikacja Django stworzona w ramach projektu zespołowego z metodyką Agile (Scrum), dotycząca planowania posiłków i zdrowego odżywiania.",
+              tech: "Python, Django, HTML, CSS, Git, Agile (Scrum)",
+              github: "https://github.com/Daviz96/ScrumLab-Jedzonko",
+              link: "Repozytorium GitHub",
+            },
+            {
+              name: "Conference Room Reservation App",
+              description:
+                "Aplikacja webowa Django do zarządzania rezerwacjami sal konferencyjnych, z logiką backend i integracją bazy danych.",
+              tech: "Python, Django, HTML, CSS, Baza danych PostgreSQL",
+              github:
+                "https://github.com/Daviz96/Conference-Room-Reservation-App",
+              link: "Repozytorium GitHub",
+            },
+          ],
+
+          skills: [
+            "<b>Języki programowania:</b> Python, SQL, JavaScript",
+            "<b>Frameworki:</b> Django",
+            "<b>Web:</b> HTML5, CSS3",
+            "<b>Bazy danych:</b> PostgreSQL",
+            "<b>Narzędzia:</b> Git, GitHub, Docker",
+            "<b>Produktywność:</b> Microsoft Office (Word, Excel, PowerPoint)",
+          ],
+          languages: [
+            "Włoski: Język ojczysty",
+            "Polski: Biegły (C1)",
+            "Angielski: Dobry (B2)",
+          ],
+          experience: [
+            {
+              title:
+                "Technik utrzymania – Hotel 4★, Cortina d'Ampezzo, Hotel Mirage (06/2023 – 10/2024)",
+              details: [
+                "Diagnozowanie i rozwiązywanie problemów technicznych systemów",
+                "Troubleshooting oraz działania naprawcze",
+                "Wsparcie techniczne dla pracowników wewnętrznych",
+                "Zarządzanie priorytetami i praca pod presją",
+              ],
+            },
+            {
+              title:
+                "Chef de Rang – Hotel 4★, Cortina d'Ampezzo, Hotel Cortina (05/2025 – 10/2025)",
+              details: [
+                "Zarządzanie obsługą i koordynacja zespołu",
+                "Skuteczna komunikacja z klientami i współpracownikami",
+                "Rozwiązywanie problemów w dynamicznym środowisku",
+                "Organizacja pracy i przestrzeganie procedur",
+              ],
+            },
+            {
+              title:
+                "Operator okleiniarki – Calita Furniture Factory z.o.o., Łęka Opatowska  (02/2022 – 05/2023)",
+              details: [
+                "Obsługa maszyn przemysłowych zgodnie z procedurami",
+                "Monitorowanie procesów produkcyjnych i jakości",
+                "Rozwiązywanie problemów operacyjnych",
+                "Praca w uporządkowanym środowisku produkcyjnym",
+              ],
+            },
+            {
+              title: "Technik montażu eventów – Różne firmy (2015 – obecnie)",
+              details: [
+                "Praca zespołowa przy technicznym montażu wydarzeń",
+                "Zarządzanie czasem, logistyką i wymaganiami technicznymi",
+                "Szybkie dostosowanie do zmieniających się warunków",
+                "Współpraca z personelem technicznym",
+              ],
+            },
+          ],
+          privacy:
+            "Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z RODO (UE 2016/679).",
+        },
+      };
+
+      function setLanguage(lang) {
+        document.documentElement.lang = lang;
+        document.getElementById("profile-title").innerText =
+          data[lang].titles.profile;
+        document.getElementById("links-title").innerText =
+          data[lang].titles.links;
+        document.getElementById("personal-title").innerText =
+          data[lang].titles.personal;
+        document.getElementById("education-title").innerText =
+          data[lang].titles.education;
+        document.getElementById("courses-title").innerText =
+          data[lang].titles.courses;
+        document.getElementById("projects-title").innerText =
+          data[lang].titles.projects;
+        document.getElementById("skills-title").innerText =
+          data[lang].titles.skills;
+        document.getElementById("languages-title").innerText =
+          data[lang].titles.languages;
+        document.getElementById("experience-title").innerText =
+          data[lang].titles.experience;
+
+        document.getElementById("profile-text").innerText = data[lang].profile;
+
+        const p = data[lang].personal;
+
+        document.getElementById("personal-info").innerHTML = `
+  <li>📍 ${p.location}</li>
+  <li>✉️ ${p.email}</li>
+  <li>📞 ${p.phone.join("<br>")}</li>
+  <li>🚗 ${p.driving}</li>
+`;
+
+        document.getElementById("links").innerHTML = data[lang].links
+          .map((l) => `<li>${l}</li>`)
+          .join("");
+        document.getElementById("education").innerHTML = data[lang].education
+          .map((i) => `<li>${i}</li>`)
+          .join("");
+        document.getElementById("courses").innerHTML = data[lang].courses
+          .map(
+            (c) => `
+      <li>
+        <b>${c.title}</b>
+        <ul>
+          ${c.details.map((d) => `<li>${d}</li>`).join("")}
+        </ul>
+        <a href="${c.certificate}" target="_blank" class="no-print">
+          📄 ${c.link}
+        </a>
+      </li>
+    `
+          )
+          .join("");
+        document.getElementById("projects").innerHTML = data[lang].projects
+          .map(
+            (p) => `
+      <li>
+        <b>${p.name}</b><br>
+        ${p.description}<br>
+        <i>Tech stack:</i> ${p.tech}<br>
+        <a href="${p.github}" target="_blank" class="no-print">
+          🔗 ${p.link}
+        </a>
+        <span class="print-only">Repository disponibile su GitHub</span>
+      </li>
+    `
+          )
+          .join("");
+        document.getElementById("skills").innerHTML = data[lang].skills
+          .map((i) => `<li>${i}</li>`)
+          .join("");
+        document.getElementById("languages").innerHTML = data[lang].languages
+          .map((l) => `<li>${l}</li>`)
+          .join("");
+        document.getElementById("experience").innerHTML = data[lang].experience
+          .map(
+            (exp) => `
+    <li>
+      <b>${exp.title}</b>
+      <ul>
+        ${exp.details.map((d) => `<li>${d}</li>`).join("")}
+      </ul>
+    </li>
+  `
+          )
+          .join("");
+
+        document.getElementById("privacy").innerText = data[lang].privacy;
+      }
+
+      function toggleDarkMode() {
+        document.body.classList.toggle("dark");
+      }
+
+      function exportPDF() {
+        window.print();
+      }
+
+      setLanguage("it");
+    </script>
+  </body>
+</html>
