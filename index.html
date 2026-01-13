@@ -671,31 +671,29 @@
           )
           .join("");
 
-
-  // Download PDF Button
-        function isMobileDevice() {
-  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
-
-const pdfLinks = {
-  it: "assets/pdf/cv_ita.pdf",
-  en: "assets/pdf/cv_eng.pdf",
-  pl: "assets/pdf/cv_pl.pdf"
-};
-
-document.getElementById("pdf-btn").addEventListener("click", () => {
-  if (isMobileDevice()) {
-    // MOBILE → download PDF statico
-    window.open(pdfLinks[currentLang], "_blank");
-  } else {
-    // DESKTOP → stampa / genera PDF
-    window.print();
-  }
-});
-
-
         document.getElementById("privacy").innerText = data[lang].privacy;
       }
+
+        // Download PDF Button
+        function isMobileDevice() {
+            return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        }
+
+        const pdfLinks = {
+          it: "assets/pdf/cv_ita.pdf",
+          en: "assets/pdf/cv_eng.pdf",
+          pl: "assets/pdf/cv_pl.pdf"
+        };
+
+        document.getElementById("pdf-btn").addEventListener("click", () => {
+          if (isMobileDevice()) {
+          // MOBILE → download PDF statico
+          window.open(pdfLinks[currentLang], "_blank");
+          } else {
+          // DESKTOP → stampa / genera PDF
+          window.print();
+          }
+        });
 
       function toggleDarkMode() {
         document.body.classList.toggle("dark");
