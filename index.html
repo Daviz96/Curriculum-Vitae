@@ -119,6 +119,8 @@
           <button onclick="setLanguage('en')">EN</button>
           <button onclick="toggleDarkMode()">🌙 Dark</button>
           <button onclick="exportPDF()">📄 Export PDF</button>
+          <button id="pdf-btn">📄 Scarica PDF</button>
+
         </div>
       </div>
     </header>
@@ -667,6 +669,29 @@
   `
           )
           .join("");
+
+
+  // Download PDF Button
+        function isMobileDevice() {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+const pdfLinks = {
+  it: "assets/pdf/cv-it.pdf",
+  en: "assets/pdf/cv-en.pdf",
+  pl: "assets/pdf/cv-pl.pdf"
+};
+
+document.getElementById("pdf-btn").addEventListener("click", () => {
+  if (isMobileDevice()) {
+    // MOBILE → download PDF statico
+    window.open(pdfLinks[currentLang], "_blank");
+  } else {
+    // DESKTOP → stampa / genera PDF
+    window.print();
+  }
+});
+
 
         document.getElementById("privacy").innerText = data[lang].privacy;
       }
