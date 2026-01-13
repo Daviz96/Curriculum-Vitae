@@ -585,6 +585,7 @@
 
       function setLanguage(lang) {
         document.documentElement.lang = lang;
+        currentLang = lang;
         document.getElementById("profile-title").innerText =
           data[lang].titles.profile;
         document.getElementById("links-title").innerText =
