@@ -584,8 +584,9 @@
       };
 
       function setLanguage(lang) {
+
         document.documentElement.lang = lang;
-        currentLang = lang;
+        let currentLang = lang;
         document.getElementById("profile-title").innerText =
           data[lang].titles.profile;
         document.getElementById("links-title").innerText =
@@ -610,11 +611,11 @@
         const p = data[lang].personal;
 
         document.getElementById("personal-info").innerHTML = `
-  <li>📍 ${p.location}</li>
-  <li>✉️ ${p.email}</li>
-  <li>📞 ${p.phone.join("<br>")}</li>
-  <li>🚗 ${p.driving}</li>
-`;
+            <li>📍 ${p.location}</li>
+            <li>✉️ ${p.email}</li>
+            <li>📞 ${p.phone.join("<br>")}</li>
+            <li>🚗 ${p.driving}</li>
+        `;
 
         document.getElementById("links").innerHTML = data[lang].links
           .map((l) => `<li>${l}</li>`)
